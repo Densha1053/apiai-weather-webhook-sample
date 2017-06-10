@@ -69,7 +69,7 @@ def processRequest(req):
     # mqttc.on_log = on_log
     mqttc.username_pw_set("Benz1053","benz1053")
     mqttc.connect("km1.io", 1883, 60)
-    mqttc.subscribe("/Benz1053/room2”, 0)
+    mqttc.subscribe("/Benz1053/room2”, 2)
     mqttc.loop_forever()
     yql_query = makeYqlQuery(req)
     if yql_query is None:
@@ -92,7 +92,7 @@ def makeYqlQuery(req):
 
 
 def makeWebhookResult():
-    speech = "ทำให้แล้วนะ"
+    speech = "ok"
 
     print("Response:")
     print(speech)
