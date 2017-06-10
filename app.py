@@ -58,11 +58,16 @@ def on_log(mqttc, obj, level, string):
 
 
 def processRequest(req):
-    if req.get("result").get("action") != "yahooWeatherForecast":
+    if req.get("result").get("action") != "MQTT":
         return {}
-    yql_query = makeYqlQuery(req)
+    result = req.get("result")
+    parameters = result.get("parameters")
+    city = parameters.get("geo-city")
+    payload = {
+        "city" : city
+    }
     print("tuple")
-    (rc, mid) = mqttc.publish("/Benz1053/room2", yql_query, qos=2)
+    (rc, mid) = mqttc.publish("/Benz1053/room2", city, qos=2)
     baseurl = "https://api.join.me/v1/meetings"
     p = Request(baseurl)
     p.add_header('Content-Type', 'application/json; charset=utf-8')
@@ -74,16 +79,6 @@ def processRequest(req):
     res = makeWebhookResult(data)
     return res
 
-
-
-def makeYqlQuery(req):
-    result = req.get("result")
-    parameters = result.get("parameters")
-    city = parameters.get("geo-city")
-    if city is None:
-        return None
-
-    return city
 
 
 def makeWebhookResult(data):
