@@ -63,7 +63,15 @@ def processRequest(req):
     yql_query = makeYqlQuery(req)
     print("tuple")
     (rc, mid) = mqttc.publish("/Benz1053/room2", yql_query, qos=2)
-    res = makeWebhookResult()
+    baseurl = "https://api.join.me/v1/meetings"
+    p = Request(baseurl)
+    p.add_header('Content-Type', 'application/json; charset=utf-8')
+    p.add_header('Authorization', 'Bearer ' + access_token) #from oauth
+    jsondata = json.dumps(payload)
+    jsondataasbytes = jsondata.encode('utf-8')   # needs to be bytes
+    jresult = urlopen(p, jsondataasbytes).read()
+    data = json.loads(jresult)
+    res = makeWebhookResult(data)
     return res
 
 
@@ -78,7 +86,7 @@ def makeYqlQuery(req):
     return city
 
 
-def makeWebhookResult():
+def makeWebhookResult(data):
     speech = "ok"
 
     print("Response:")
