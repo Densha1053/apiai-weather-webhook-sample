@@ -60,20 +60,7 @@ def on_log(mqttc, obj, level, string):
 def processRequest(req):
     if req.get("result").get("action") != "yahooWeatherForecast":
         return {}
-    mqttc = mqtt.Client()
-    mqttc.on_message = on_message
-    mqttc.on_connect = on_connect
-    mqttc.on_publish = on_publish
-    mqttc.on_subscribe = on_subscribe
-    # Uncomment to enable debug messages
-    # mqttc.on_log = on_log
-    mqttc.username_pw_set("Benz1053","benz1053")
-    mqttc.connect("km1.io", 1883, 60)
-    mqttc.subscribe("/Benz1053/room2”, 2)
-    mqttc.loop_forever()
     yql_query = makeYqlQuery(req)
-    if yql_query is None:
-        return {}
     print("tuple")
     (rc, mid) = mqttc.publish("/Benz1053/room2", yql_query, qos=2)
     res = makeWebhookResult()
@@ -104,7 +91,16 @@ def makeWebhookResult():
         # "contextOut": [],
         "source": "apiai-weather-webhook-sample"
     }
-
+mqttc = mqtt.Client()
+mqttc.on_message = on_message
+mqttc.on_connect = on_connect
+mqttc.on_publish = on_publish
+mqttc.on_subscribe = on_subscribe
+mqttc.on_log = on_log
+mqttc.username_pw_set("Benz1053","benz1053")
+mqttc.connect("km1.io", 1883, 60)
+mqttc.subscribe("/Benz1053/room2”, 2)
+mqttc.loop_forever()
 
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))
