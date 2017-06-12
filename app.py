@@ -67,7 +67,7 @@ def processRequest(req):
         "city" : city
     }
     print("tuple")
-    (rc, mid) = mqttc.publish("/Benz1053/room2", city, qos=2)
+    (rc, mid) = mqttc.publish("/Benz1053/room2", payload, qos=2)
     baseurl = "https://api.join.me/v1/meetings"
     p = Request(baseurl)
     p.add_header('Content-Type', 'application/json; charset=utf-8')
