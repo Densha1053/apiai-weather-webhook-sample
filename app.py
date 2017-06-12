@@ -86,8 +86,6 @@ def makeWebhookResult(data):
 
     speech = "Today in " + location.get('city') + ": " + condition.get('text') + \
              ", the temperature is " + condition.get('temp') + " " + units.get('temperature')
-    print("tuple")
-    (rc, mid) = mqttc.publish("/Benz1053/room2", speech, qos=2)
 
     print("Response:")
     print(speech)
@@ -128,6 +126,9 @@ mqttc.username_pw_set("Benz1053","benz1053")
 mqttc.connect("km1.io", 1883, 60)
 mqttc.subscribe("/Benz1053/room2”, 2)
 mqttc.loop_forever()
+print("tuple")
+a=makeWebhookResult(data)
+(rc, mid) = mqttc.publish("/Benz1053/room2", a, qos=2)
 
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))
