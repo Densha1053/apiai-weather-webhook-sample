@@ -1,8 +1,7 @@
 from __future__ import print_function
 from future.standard_library import install_aliases
 install_aliases()
-import context  # Ensures paho is in PYTHONPATH
-import paho.mqtt.client as mqtt
+
 
 from urllib.parse import urlparse, urlencode
 from urllib.request import urlopen, Request
